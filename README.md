@@ -1,5 +1,5 @@
 ## filetype
-go package for file type checking,the core checker logic comes froms https://github.com/h2non/filetype ,the main difference is this package only get minimized file content for checking logic
+golang package for file type checking, the core checker logic comes from the project, https://github.com/h2non/filetype , the main difference is this package only gets minimized file content buf for checking logic, which is friendly to big size file.
 
 ## Examples
 
@@ -16,16 +16,9 @@ import (
 
 func main() {
 
-    if filetype.IsMp3("sample.mp3") {
-        fmt.Println("is mp3")
-    }
-
-    if filetype.TypeIn("sample.mp3",filetype.MP3,filetype.MP4,filetype.filetype.WAV) {
-        fmt.Println("in multi custom file type")
-    }
-
-    if filetype.TypeIn("sample.mp3",filetype.Audios) {
-        fmt.Println("is in audio class")
-    }
+    ok, _ := Is(types.TypeJpeg, "sample.jpg")
+	if !ok {
+		fmt.Println("this file is not jpg")
+	}
 }
 ```
