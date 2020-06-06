@@ -1,17 +1,8 @@
-package types
+package checker
 
 import (
 	"bytes"
 	"encoding/binary"
-)
-
-var (
-	TypeDoc  = NewFileType("doc", "application/msword", 0, 514, Doc)
-	TypeDocx = NewFileType("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 0, -1, Docx)
-	TypeXls  = NewFileType("xls", "application/vnd.ms-excel", 0, 514, Xls)
-	TypeXlsx = NewFileType("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 0, -1, Xlsx)
-	TypePpt  = NewFileType("ppt", "application/vnd.ms-powerpoint", 0, 514, Ppt)
-	TypePptx = NewFileType("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation", 0, -1, Pptx)
 )
 
 type docType int
@@ -28,42 +19,66 @@ const (
 
 // Doc small file will return false
 //reference: https://bz.apache.org/ooo/show_bug.cgi?id=111457
-func Doc(buf []byte) bool {
-
-	return len(buf) > 513 && buf[0] == 0xD0 && buf[1] == 0xCF &&
+func Doc(file string) (bool, error) {
+	buf, err := getBytes(file, 0, 514)
+	if err != nil {
+		return false, err
+	}
+	return len(buf) > 513 &&
+		buf[0] == 0xD0 && buf[1] == 0xCF &&
 		buf[2] == 0x11 && buf[3] == 0xE0 &&
-		buf[512] == 0xEC && buf[513] == 0xA5
+		buf[512] == 0xEC && buf[513] == 0xA5, nil
 }
 
-func Docx(buf []byte) bool {
+func Docx(file string) (bool, error) {
+	buf, err := getBytes(file, 0, -1)
+	if err != nil {
+		return false, err
+	}
 	typ, ok := msooxml(buf)
-	return ok && typ == TYPE_DOCX
+	return ok && typ == TYPE_DOCX, nil
 }
 
 // Xls small file will return false
-func Xls(buf []byte) bool {
-
-	return len(buf) > 513 && buf[0] == 0xD0 && buf[1] == 0xCF &&
+func Xls(file string) (bool, error) {
+	buf, err := getBytes(file, 0, 514)
+	if err != nil {
+		return false, err
+	}
+	return len(buf) > 513 &&
+		buf[0] == 0xD0 && buf[1] == 0xCF &&
 		buf[2] == 0x11 && buf[3] == 0xE0 &&
-		buf[512] == 0x09 && buf[513] == 0x08
+		buf[512] == 0x09 && buf[513] == 0x08, nil
 }
 
-func Xlsx(buf []byte) bool {
+func Xlsx(file string) (bool, error) {
+	buf, err := getBytes(file, 0, -1)
+	if err != nil {
+		return false, err
+	}
 	typ, ok := msooxml(buf)
-	return ok && typ == TYPE_XLSX
+	return ok && typ == TYPE_XLSX, nil
 }
 
 // Ppt small file will return false
-func Ppt(buf []byte) bool {
-
-	return len(buf) > 513 && buf[0] == 0xD0 && buf[1] == 0xCF &&
+func Ppt(file string) (bool, error) {
+	buf, err := getBytes(file, 0, 514)
+	if err != nil {
+		return false, err
+	}
+	return len(buf) > 513 &&
+		buf[0] == 0xD0 && buf[1] == 0xCF &&
 		buf[2] == 0x11 && buf[3] == 0xE0 &&
-		buf[512] == 0xA0 && buf[513] == 0x46
+		buf[512] == 0xA0 && buf[513] == 0x46, nil
 }
 
-func Pptx(buf []byte) bool {
+func Pptx(file string) (bool, error) {
+	buf, err := getBytes(file, 0, -1)
+	if err != nil {
+		return false, err
+	}
 	typ, ok := msooxml(buf)
-	return ok && typ == TYPE_PPTX
+	return ok && typ == TYPE_PPTX, nil
 }
 
 func msooxml(buf []byte) (typ docType, found bool) {

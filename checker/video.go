@@ -1,15 +1,10 @@
-package types
+package checker
 
-var (
-	TypeMp4  = NewFileType("mp4", "video/mp4", 0, 12, Mp4)
-	TypeAvi  = NewFileType("avi", "video/x-msvideo", 0, 11, Avi)
-	TypeWmv  = NewFileType("wmv", "video/x-ms-wmv", 0, 10, Wmv)
-	TypeMpeg = NewFileType("mpg", "video/mpeg", 0, 4, Mpeg)
-	TypeFlv  = NewFileType("flv", "video/x-flv", 0, 4, Flv)
-	Type3gp  = NewFileType("3gp", "video/3gpp", 0, 11, Match3gp)
-)
-
-func Mp4(buf []byte) bool {
+func Mp4(file string) (bool, error) {
+	buf, err := getBytes(file, 0, 12)
+	if err != nil {
+		return false, err
+	}
 	return len(buf) > 11 &&
 		(buf[4] == 'f' && buf[5] == 't' && buf[6] == 'y' && buf[7] == 'p') &&
 		((buf[8] == 'a' && buf[9] == 'v' && buf[10] == 'c' && buf[11] == '1') ||
@@ -39,42 +34,62 @@ func Mp4(buf []byte) bool {
 			(buf[8] == 'N' && buf[9] == 'D' && buf[10] == 'X' && buf[11] == 'P') ||
 			(buf[8] == 'N' && buf[9] == 'D' && buf[10] == 'X' && buf[11] == 'S') ||
 			(buf[8] == 'F' && buf[9] == '4' && buf[10] == 'V' && buf[11] == ' ') ||
-			(buf[8] == 'F' && buf[9] == '4' && buf[10] == 'P' && buf[11] == ' '))
+			(buf[8] == 'F' && buf[9] == '4' && buf[10] == 'P' && buf[11] == ' ')), nil
 }
 
-func Avi(buf []byte) bool {
+func Avi(file string) (bool, error) {
+	buf, err := getBytes(file, 0, 11)
+	if err != nil {
+		return false, err
+	}
 	return len(buf) > 10 &&
 		buf[0] == 0x52 && buf[1] == 0x49 &&
 		buf[2] == 0x46 && buf[3] == 0x46 &&
 		buf[8] == 0x41 && buf[9] == 0x56 &&
-		buf[10] == 0x49
+		buf[10] == 0x49, nil
 }
 
-func Wmv(buf []byte) bool {
+func Wmv(file string) (bool, error) {
+	buf, err := getBytes(file, 0, 10)
+	if err != nil {
+		return false, err
+	}
 	return len(buf) > 9 &&
 		buf[0] == 0x30 && buf[1] == 0x26 &&
 		buf[2] == 0xB2 && buf[3] == 0x75 &&
 		buf[4] == 0x8E && buf[5] == 0x66 &&
 		buf[6] == 0xCF && buf[7] == 0x11 &&
-		buf[8] == 0xA6 && buf[9] == 0xD9
+		buf[8] == 0xA6 && buf[9] == 0xD9, nil
 }
 
-func Mpeg(buf []byte) bool {
+func Mpeg(file string) (bool, error) {
+	buf, err := getBytes(file, 0, 4)
+	if err != nil {
+		return false, err
+	}
 	return len(buf) > 3 &&
 		buf[0] == 0x0 && buf[1] == 0x0 &&
 		buf[2] == 0x1 && buf[3] >= 0xb0 &&
-		buf[3] <= 0xbf
+		buf[3] <= 0xbf, nil
 }
 
-func Flv(buf []byte) bool {
+func Flv(file string) (bool, error) {
+	buf, err := getBytes(file, 0, 4)
+	if err != nil {
+		return false, err
+	}
 	return len(buf) > 3 &&
 		buf[0] == 0x46 && buf[1] == 0x4C &&
-		buf[2] == 0x56 && buf[3] == 0x01
+		buf[2] == 0x56 && buf[3] == 0x01, nil
 }
 
-func Match3gp(buf []byte) bool {
+func Match3gp(file string) (bool, error) {
+	buf, err := getBytes(file, 0, 11)
+	if err != nil {
+		return false, err
+	}
 	return len(buf) > 10 &&
 		buf[4] == 0x66 && buf[5] == 0x74 && buf[6] == 0x79 &&
 		buf[7] == 0x70 && buf[8] == 0x33 && buf[9] == 0x67 &&
-		buf[10] == 0x70
+		buf[10] == 0x70, nil
 }

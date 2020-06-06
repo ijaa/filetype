@@ -2,54 +2,57 @@ package filetype
 
 import (
 	"testing"
-
-	"github.com/ijaa/filetype/types"
 )
 
 func TestIs(t *testing.T) {
-	ok, err := Is(types.TypeDocx, "./testfiles/sample.docx")
+	ok, err := Is(TypeDocx, "./testfiles/sample.docx")
 	if !ok {
-		t.Fatalf("Invalid match: %s, err:%s", types.TypeDocx.Extension, err)
+		t.Fatalf("Invalid match: %s, err:%s", TypeDocx.Extension, err)
 	}
-	ok, err = Is(types.TypeGif, "./testfiles/sample.gif")
+	ok, err = Is(TypeGif, "./testfiles/sample.gif")
 	if !ok {
-		t.Fatalf("Invalid match: %s, err:%s", types.TypeGif.Extension, err)
+		t.Fatalf("Invalid match: %s, err:%s", TypeGif.Extension, err)
 	}
-	ok, err = Is(types.TypeJpeg, "./testfiles/sample.jpg")
+	ok, err = Is(TypeJpeg, "./testfiles/sample.jpg")
 	if !ok {
-		t.Fatalf("Invalid match: %s, err:%s", types.TypeJpeg.Extension, err)
+		t.Fatalf("Invalid match: %s, err:%s", TypeJpeg.Extension, err)
 	}
-	ok, err = Is(types.TypeMp4, "./testfiles/sample.mp4")
+	ok, err = Is(TypeMp4, "./testfiles/sample.mp4")
 	if !ok {
-		t.Fatalf("Invalid match: %s, err:%s", types.TypeMp4.Extension, err)
+		t.Fatalf("Invalid match: %s, err:%s", TypeMp4.Extension, err)
 	}
-	ok, err = Is(types.TypePng, "./testfiles/sample.png")
+	ok, err = Is(TypePng, "./testfiles/sample.png")
 	if !ok {
-		t.Fatalf("Invalid match: %s, err:%s", types.TypePng.Extension, err)
+		t.Fatalf("Invalid match: %s, err:%s", TypePng.Extension, err)
 	}
-	ok, err = Is(types.TypePptx, "./testfiles/sample.pptx")
+	ok, err = Is(TypePptx, "./testfiles/sample.pptx")
 	if !ok {
-		t.Fatalf("Invalid match: %s, err:%s", types.TypePptx.Extension, err)
+		t.Fatalf("Invalid match: %s, err:%s", TypePptx.Extension, err)
 	}
-	ok, err = Is(types.TypeTar, "./testfiles/sample.tar")
+	ok, err = Is(TypeTar, "./testfiles/sample.tar")
 	if !ok {
-		t.Fatalf("Invalid match: %s, err:%s", types.TypeTar.Extension, err)
+		t.Fatalf("Invalid match: %s, err:%s", TypeTar.Extension, err)
 	}
-	ok, err = Is(types.TypeTiff, "./testfiles/sample.tif")
+	ok, err = Is(TypeTiff, "./testfiles/sample.tif")
 	if !ok {
-		t.Fatalf("Invalid match: %s, err:%s", types.TypeTiff.Extension, err)
+		t.Fatalf("Invalid match: %s, err:%s", TypeTiff.Extension, err)
 	}
-	ok, err = Is(types.TypeXlsx, "./testfiles/sample.xlsx")
+	ok, err = Is(TypeXlsx, "./testfiles/sample.xlsx")
 	if !ok {
-		t.Fatalf("Invalid match: %s, err:%s", types.TypeXlsx.Extension, err)
+		t.Fatalf("Invalid match: %s, err:%s", TypeXlsx.Extension, err)
 	}
-	ok, err = Is(types.TypeZip, "./testfiles/sample.zip")
+	ok, err = Is(TypeZip, "./testfiles/sample.zip")
 	if !ok {
-		t.Fatalf("Invalid match: %s, err:%s", types.TypeZip.Extension, err)
+		t.Fatalf("Invalid match: %s, err:%s", TypeZip.Extension, err)
 	}
-	ok, err = Is(types.TypeMp3, "./testfiles/sample.mp3")
+	ok, err = Is(TypeMp3, "./testfiles/sample.mp3")
 	if !ok {
-		t.Fatalf("Invalid match: %s, err:%s", types.TypeMp3.Extension, err)
+		t.Fatalf("Invalid match: %s, err:%s", TypeMp3.Extension, err)
+	}
+
+	ok, err = IsIn([]FileType{TypeAvi, TypeMp3, TypeMp4}, "./testfiles/sample.mp3")
+	if !ok {
+		t.Fatalf("Invalid match: %s, err:%s", TypeMp3.Extension, err)
 	}
 
 }
