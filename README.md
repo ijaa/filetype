@@ -21,7 +21,7 @@ func main() {
 		fmt.Println("this file is not jpg")
     }
     
-    ok, _ := filetype.IsIn([]filetype.FileType{filetype.TypeJpeg,filetype.TypePng} "./sample.jpg")
+    ok, _ := filetype.IsIn([]filetype.FileType{filetype.TypeJpeg,filetype.TypePng}, "./sample.jpg")
 	if !ok {
 		fmt.Println("this file is not jpg or png")
 	}
